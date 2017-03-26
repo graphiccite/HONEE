@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import logging
-#logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s- %(message)s')
+logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s- %(message)s')
+#logging.disable(logging.CRITICAL)#comment out this line to turn logging on
 
 logging.debug("Start of H.O.N.E")
 
@@ -59,4 +60,33 @@ for thisRecipe in recipes:
 
 print(listOfApproved)
 
+#creates a csv list of all the ingredients in recipes, optional and required
+#this can be used to create a pantry file to be read in.
+#However once the pantry is created this section should be commented out. 
+allingredients=[]
+for dish in recipes.keys():
+    for item in recipes[dish]["required"]:
+        allingredients.append(item)
+    for item in recipes[dish]["optional"]:
+        allingredients.append(item)
+allingredients=list(set(allingredients))        
+allingredients.sort()
+with open("all ingredients list.csv","w") as outputfile:
+    for i in allingredients:
+        outputfile.write(i)
+        outputfile.write(",\n")
+
+        
+#saves recipes as a json file so once the're written in in python it
+#exports them to a plain text file which it can reread as a dictionary
+"""import json
+with open("recipes.json","w") as recipesfile:
+    recipesfile.write(json.dumps(recipes))
+with open("recipes.json","r") as recipesfile:
+    newrecipes =recipesfile.read()
+print(newrecipes)
+newjson = json.loads(str(newrecipes))
+print("\n")
+print(newjson["salmon"])
+"""
 logging.debug("end of program")
